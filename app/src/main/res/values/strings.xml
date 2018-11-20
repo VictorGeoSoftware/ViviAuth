@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Profiles</string>
+    <string name="hint_email">Email</string>
+    <string name="login">Login</string>
+    <string name="error_message">Some error happen: $s</string>
+    <string name="user_or_password_empty">User or password is empty</string>
+</resources>
