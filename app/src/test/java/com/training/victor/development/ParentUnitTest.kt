@@ -1,27 +1,31 @@
 package com.training.victor.development
 
-import com.training.victor.development.di.TestNetworkModule
-import com.training.victor.development.di.components.NetworkComponent
-import com.training.victor.development.di.modules.DataManagerModule
-import com.training.victor.development.di.modules.NetworkModule
+import com.training.victor.development.di.TestAppModule
+import com.training.victor.development.di.TestRetrofitModule
+import com.training.victor.development.di.TestTokenManagerModule
+import com.training.victor.development.di.components.AppComponent
+import com.training.victor.development.di.components.NetworkAuthComponent
+import com.training.victor.development.di.modules.*
 import dagger.Component
-import org.junit.Before
 import javax.inject.Singleton
 
 open class ParentUnitTest {
-    open lateinit var testNetworkComponent: TestNetworkComponent
+    open lateinit var testComponent: TestComponent
 
     @Singleton
-    @Component(modules = [NetworkModule::class, DataManagerModule::class])
-    interface TestNetworkComponent : NetworkComponent {
+    @Component(modules = [AppModule::class, NetworkAuthModule::class, NetworkModule::class,
+        RetrofitModule::class, DataManagerModule::class, TokenManagerModule::class])
+    interface TestComponent : AppComponent {
         fun inject(target: LoginPresenterTest)
         fun inject(target: MedicsPresenterTest)
     }
 
-    @Before
+
     open fun setUp() {
-        testNetworkComponent = DaggerParentUnitTest_TestNetworkComponent.builder()
-            .networkModule(TestNetworkModule())
+        testComponent = DaggerParentUnitTest_TestComponent.builder()
+            .appModule(TestAppModule())
+            .tokenManagerModule(TestTokenManagerModule())
+            .retrofitModule(TestRetrofitModule())
             .build()
     }
 }

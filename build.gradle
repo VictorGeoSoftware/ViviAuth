@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 ext {
-    apiUrl = '"https://auth.staging.vivy.com"'
+    apiAuthUrl = '"https://auth.staging.vivy.com"'
+    apiUrl = '"https://api.staging.uvita.eu"'
     timeOut = '10000'
     daggerVersion = '2.17'
 }

@@ -17,7 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:hint="User name" android:inputType="textEmailAddress" android:hint="@string/hint_email"
-                android:id="@+id/txtUserName"/>
+                android:id="@+id/txtUserName" android:text="androidChallenge@vivy.com"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -32,7 +32,8 @@
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:hint="Password" android:id="@+id/txtPassword"/>
+                tools:hint="Password" android:id="@+id/txtPassword" android:text="88888888"
+                android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
     <Button
             android:text="@string/login"
@@ -53,5 +54,6 @@
             app:layout_constraintTop_toBottomOf="@+id/btnLogin"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="168dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="168dp" app:layout_constraintHorizontal_bias="0.0"/>
+            android:layout_marginEnd="168dp" app:layout_constraintHorizontal_bias="0.0" android:indeterminate="true"
+            tools:visibility="visible" android:visibility="gone"/>
 </android.support.constraint.ConstraintLayout>

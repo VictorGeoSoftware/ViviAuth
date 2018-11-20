@@ -7,6 +7,7 @@ import com.training.victor.development.data.DataManager
 import com.training.victor.development.network.LoginRepository
 import com.training.victor.development.presenter.LoginPresenter
 import io.reactivex.schedulers.TestScheduler
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -23,11 +24,11 @@ class LoginPresenterTest: ParentUnitTest() {
     private lateinit var testScheduler: TestScheduler
     private lateinit var loginPresenter: LoginPresenter
 
-
+    @Before
     override fun setUp() {
         super.setUp()
 
-        testNetworkComponent.inject(this)
+        testComponent.inject(this)
         MockitoAnnotations.initMocks(this)
         testScheduler = TestScheduler()
         loginPresenter = createMockedPresenter()

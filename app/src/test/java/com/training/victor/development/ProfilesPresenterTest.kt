@@ -23,7 +23,7 @@ class ProfilesPresenterTest: ParentUnitTest() {
 //    override fun setUp() {
 //        super.setUp()
 //
-//        testNetworkComponent.inject(this)
+//        testComponent.inject(this)
 //        MockitoAnnotations.initMocks(this)
 //        testScheduler = TestScheduler()
 //        profilesPresenter = createMockedPresenter()

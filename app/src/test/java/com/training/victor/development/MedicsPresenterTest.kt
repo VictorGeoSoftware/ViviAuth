@@ -1,13 +1,14 @@
 package com.training.victor.development
 
-import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.anyArray
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.training.victor.development.data.DataManager
-import com.training.victor.development.network.LoginRepository
-import com.training.victor.development.presenter.LoginPresenter
+import com.training.victor.development.data.TokenManager
+import com.training.victor.development.data.models.MedicItem
 import com.training.victor.development.presenter.MedicsPresenter
 import io.reactivex.schedulers.TestScheduler
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -18,16 +19,18 @@ import javax.inject.Inject
 @RunWith(MockitoJUnitRunner::class)
 class MedicsPresenterTest: ParentUnitTest() {
     @Inject lateinit var dataManager: DataManager
+    @Inject lateinit var tokenManager: TokenManager
     @Mock lateinit var medicsView: MedicsPresenter.MedicsView
 
     private lateinit var testScheduler: TestScheduler
     private lateinit var medicsPresenter: MedicsPresenter
 
 
+    @Before
     override fun setUp() {
         super.setUp()
 
-        testNetworkComponent.inject(this)
+        testComponent.inject(this)
         MockitoAnnotations.initMocks(this)
         testScheduler = TestScheduler()
         medicsPresenter = createMockedPresenter()
@@ -39,22 +42,54 @@ class MedicsPresenterTest: ParentUnitTest() {
         return loginPresenter
     }
 
-    // todo :: implementar UI para splash de login y presentar otra activity para la busqueda de doctores!
+    
 
     // --------------------------------------------- TESTING CASES ---------------------------------------------
     @Test
-    fun `should call to medic list and retrieve some medic list`() {
-        val bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhbmRyb2lkQ2hhbGxlbmdlQHZpdnkuY29tIiwic3R5cGUiOiJVU0VSIiwic2NvcGUiOlsiYmFzaWMiXSwiaWQiOiJlY2I3NDBlNS0wNzMxLTQ3ZWEtODAyNC03YzFjYTlhZWQzMjciLCJleHAiOjE1NDI3MDI1ODksImp0aSI6ImY0M2JiNjhjLTZhNGItNDA5OC04MDdjLTI4YWMyMzlmMTBjMCIsImNsaWVudF9pZCI6ImlwaG9uZSJ9.Fp1rQrkban4P4rLhh12TMOSW5Qbwe3jLjhasEBv7mS8"
+    fun `should call to medic list and get medic list`() {
         val user = "androidChallenge@vivy.com"
-        val password = "777"
+        val password = "88888888"
+        dataManager.mUser = user
+        dataManager.mPassword = password
+        val medicName = "Doctor"
+        val lat = 52.534709
+        val long = 13.3976972
 
-        //{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhbmRyb2lkQ2hhbGxlbmdlQHZpdnkuY29tIiwic3R5cGUiOiJVU0VSIiwic2NvcGUiOlsiYmFzaWMiXSwiaWQiOiJlY2I3NDBlNS0wNzMxLTQ3ZWEtODAyNC03YzFjYTlhZWQzMjciLCJleHAiOjE1NDI3MDI1ODksImp0aSI6ImY0M2JiNjhjLTZhNGItNDA5OC04MDdjLTI4YWMyMzlmMTBjMCIsImNsaWVudF9pZCI6ImlwaG9uZSJ9.Fp1rQrkban4P4rLhh12TMOSW5Qbwe3jLjhasEBv7mS8","token_type":"bearer","refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhbmRyb2lkQ2hhbGxlbmdlQHZpdnkuY29tIiwic3R5cGUiOiJVU0VSIiwic2NvcGUiOlsiYmFzaWMiXSwiYXRpIjoiZjQzYmI2OGMtNmE0Yi00MDk4LTgwN2MtMjhhYzIzOWYxMGMwIiwiaWQiOiJlY2I3NDBlNS0wNzMxLTQ3ZWEtODAyNC03YzFjYTlhZWQzMjciLCJleHAiOjE1NDUyOTQyODksImp0aSI6ImNlZjExNWQ4LWJhZmItNGYwNS1iZGM1LTA5NDgyYTYzYTZhMSIsImNsaWVudF9pZCI6ImlwaG9uZSJ9.GlSUgAY_JbzDUE00imLkyfIFpbW8v5rsxfRTjD9T5uE","expires_in":299,"scope":"basic","jti":"f43bb68c-6a4b-4098-807c-28ac239f10c0","phoneVerified":false}
+        medicsPresenter.getMedicListAuth(medicName, lat, long)
+        testScheduler.triggerActions()
 
-//        loginPresenter.login(user, password)
+        val medicList = ArrayList<MedicItem>()
+        verify(medicsView, times(1)).onMedicListReceived(medicList)
+    }
+
+    @Test
+    fun `should call to medic list and get some authentication error`() {
+        val user = "androidChallenge@vivy"
+        val password = "88888888"
+        dataManager.mUser = user
+        dataManager.mPassword = password
+        val medicName = "Victor"
+        val lat = 52.534709
+        val long = 13.3976972
+
+        medicsPresenter.getMedicListAuth(medicName, lat, long)
         testScheduler.triggerActions()
 
         val message = "Bad credentials"
-//        verify(loginView, times(1)).onLoginError(message)
+        verify(medicsView, times(1)).onMedicListError(message)
     }
 
+    @Test
+    fun `should request a photo by doctorId and retrieve something`() {
+        val user = "androidChallenge@vivy.com"
+        val password = "88888888"
+        dataManager.mUser = user
+        dataManager.mPassword = password
+
+        val medicId = "ChIJ25zpFiZ0dEgRocoL95RWb2A"
+
+
+        medicsPresenter.getMedicPhotoAuth(medicId)
+        testScheduler.triggerActions()
+    }
 }

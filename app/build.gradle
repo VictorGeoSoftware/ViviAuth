@@ -17,6 +17,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // Environment variables
         buildConfigField "int", "TIME_OUT", rootProject.ext.timeOut
+        buildConfigField "String", "API_AUTH_URL", rootProject.ext.apiAuthUrl
         buildConfigField "String", "API_URL", rootProject.ext.apiUrl
         // Cucumber settings
         testApplicationId 'com.training.victor.development.test'
@@ -86,4 +87,6 @@ dependencies {
     // Design support
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
+    // Play Services location
+    implementation "com.google.android.gms:play-services-location:15.0.1"
 }

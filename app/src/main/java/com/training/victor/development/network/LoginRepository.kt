@@ -1,6 +1,5 @@
 package com.training.victor.development.network
 
-import com.google.gson.JsonObject
 import com.training.victor.development.network.responses.LoginResponse
 import io.reactivex.Observable
 import retrofit2.http.Field

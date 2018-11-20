@@ -3,6 +3,7 @@ package com.training.victor.development.di.modules
 import com.training.victor.development.data.DataManager
 import com.training.victor.development.di.scopes.ViewScope
 import com.training.victor.development.presenter.LoginPresenter
+import com.training.victor.development.presenter.MedicsPresenter
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
@@ -41,4 +42,11 @@ class PresenterModule {
                                  @Named(TASK_SCHEDULER) taskScheduler:Scheduler,
                                  dataManager: DataManager)
             = LoginPresenter(androidScheduler, taskScheduler, dataManager)
+
+    @Provides
+    @ViewScope
+    fun provideMedicsPresenter(@Named(ANDROID_SCHEDULER) androidScheduler:Scheduler,
+                                 @Named(TASK_SCHEDULER) taskScheduler:Scheduler,
+                                 dataManager: DataManager)
+            = MedicsPresenter(androidScheduler, taskScheduler, dataManager)
 }

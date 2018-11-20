@@ -1,6 +1,6 @@
 package com.training.victor.development.di.components
 
-import com.training.victor.development.di.modules.NetworkModule
+import com.training.victor.development.di.modules.NetworkAuthModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -10,5 +10,5 @@ import javax.inject.Singleton
  */
 
 @Singleton
-@Component(modules = [NetworkModule::class])
-interface NetworkComponent
+@Component(modules = [NetworkAuthModule::class])
+interface NetworkAuthComponent

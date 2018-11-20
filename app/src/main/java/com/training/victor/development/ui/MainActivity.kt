@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity(), LoginPresenter.LoginView {
         setContentView(R.layout.activity_main)
         (application as MainApplication).createPresenterComponent().inject(this)
 
+        loginPresenter.view = this
 
         btnLogin.setOnClickListener {
             if (txtUserName.text?.isEmpty()!! || txtPassword.text?.isEmpty()!!) {

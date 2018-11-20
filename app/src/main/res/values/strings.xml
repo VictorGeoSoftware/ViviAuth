@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Profiles</string>
+    <string name="app_name">ViviAuth</string>
     <string name="hint_email">Email</string>
     <string name="login">Login</string>
     <string name="error_message">Some error happen: $s</string>
     <string name="user_or_password_empty">User or password is empty</string>
+    <string name="input_doctor_name">Input doctor name</string>
+    <string name="user_not_available">User not logged</string>
 </resources>
