@@ -1,12 +1,12 @@
 package com.training.victor.development
 
-import com.nhaarman.mockito_kotlin.anyArray
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.training.victor.development.data.DataManager
 import com.training.victor.development.data.TokenManager
 import com.training.victor.development.data.models.MedicItem
 import com.training.victor.development.presenter.MedicsPresenter
+import com.training.victor.development.utils.createMockedLoginResponseExpired
 import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Test
@@ -60,6 +60,23 @@ class MedicsPresenterTest: ParentUnitTest() {
 
         val medicList = ArrayList<MedicItem>()
         verify(medicsView, times(1)).onMedicListReceived(medicList)
+    }
+
+    @Test
+    fun `should call to medic list with expired token bearer`() {
+        val user = "androidChallenge@vivy.com"
+        val password = "88888888"
+        dataManager.mUser = user
+        dataManager.mPassword = password
+        tokenManager.currentLoginResponse = createMockedLoginResponseExpired()
+        val medicName = "Doctor"
+        val lat = 52.534709
+        val long = 13.3976972
+
+        medicsPresenter.getMedicList(medicName, lat, long)
+        testScheduler.triggerActions()
+
+        verify(medicsView, times(1)).onAccessTokenExpired()
     }
 
     @Test

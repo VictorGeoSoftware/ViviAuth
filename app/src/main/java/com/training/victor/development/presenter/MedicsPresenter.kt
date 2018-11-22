@@ -17,6 +17,7 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
         fun onMedicListError(message: String)
         fun onMedicListReceived(medicList: List<MedicItem>)
         fun onUserNotFound()
+        fun onAccessTokenExpired()
     }
 
     fun getMedicListAuth(doctorName: String, lat: Double, long: Double) {
@@ -55,7 +56,12 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
 
             },{
                 view?.showProgressBar(false)
-                view?.onMedicListError(it.getErrorMessage())
+
+                if (it.getErrorMessage().contains("Access token expired:")) {
+                    view?.onAccessTokenExpired()
+                } else {
+                    view?.onMedicListError(it.getErrorMessage())
+                }
             }))
     }
 

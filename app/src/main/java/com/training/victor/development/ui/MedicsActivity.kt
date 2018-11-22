@@ -129,6 +129,13 @@ class MedicsActivity: AppCompatActivity(), MedicsPresenter.MedicsView {
         finish()
     }
 
+    override fun onAccessTokenExpired() {
+        showRequestErrorMessage(getString(R.string.access_token_expired))
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     // ----------------------------------------------------------------------------------------------------------
     // --------------------------------------------- METHODS ----------------------------------------------------
     private fun createTextChangeObservable(editText: EditText): Observable<String> {
