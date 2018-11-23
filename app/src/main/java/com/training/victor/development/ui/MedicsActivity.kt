@@ -75,7 +75,7 @@ class MedicsActivity: AppCompatActivity(), MedicsPresenter.MedicsView {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
-                medicsPresenter.getMedicListAuth(it, defaultLat, defaultLong)
+                medicsPresenter.getMedicList(it, defaultLat, defaultLong)
                 edtSearchValue.hideKeyboard()
             })
 

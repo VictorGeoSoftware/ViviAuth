@@ -4,7 +4,7 @@ Feature: First start
   Scenario: Load app, retrieve user information without favourite store, and go to Store view
     Given a user launch the app for first time
     When home screen is shown
-    And profiles list is requested
+    And medics list is requested
     Then list is fulfilled
 
 

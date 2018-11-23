@@ -32,8 +32,8 @@ open class NetworkModule {
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val okHttpClient = OkHttpClient.Builder().readTimeout(10, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS)
-        okHttpClient.addInterceptor(interceptor)
-        okHttpClient.hostnameVerifier { hostname, session -> true }
+//        okHttpClient.addInterceptor(interceptor) // for Swagger endpoints
+        okHttpClient.hostnameVerifier { hostname , session -> true }
         okHttpClient.addInterceptor {
             val tokenValue = tokenManager.currentLoginResponse?.tokenType + " " + tokenManager.currentLoginResponse?.accessToken!!
             val request = it.request().newBuilder()

@@ -20,6 +20,7 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
         fun onAccessTokenExpired()
     }
 
+    @Deprecated("Only testing")
     fun getMedicListAuth(doctorName: String, lat: Double, long: Double) {
         if (dataManager.mUser.isEmpty() && dataManager.mPassword.isEmpty()) {
             view?.onUserNotFound()
@@ -44,7 +45,6 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
         }
     }
 
-    // todo :: as soon as I solve the update_time doubt, implement this methods with the corresponding refresh logic
     fun getMedicList(name: String, lat: Double, long: Double) {
         view?.showProgressBar(true)
 
@@ -53,7 +53,7 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
             .subscribeOn(subscriberSchedulers)
             .subscribe({
                 view?.showProgressBar(false)
-
+                view?.onMedicListReceived(it)
             },{
                 view?.showProgressBar(false)
 
