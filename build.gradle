@@ -2,9 +2,8 @@
 
 ext {
     apiAuthUrl = '"https://auth.staging.vivy.com"'
-    // 'https://api.staging.vivy.com/api/users/me/doctors?search=Fritzhof&lat=52.534
-    //709&lng=13.3976972'
-    apiUrl = '"https://api.staging.vivy.com"'
+//    apiUrl = '"https://api.staging.vivy.com"'
+    apiUrl = '"https://api.staging.uvita.eu"'
     timeOut = '10000'
     daggerVersion = '2.17'
 }
