@@ -4,5 +4,5 @@ This project includes
  - Dagger DI in application and tesgint scopes
  - RxJava, Retrofit, Glide and basic libraries
  - BDD and TDD testing frameworks and already prepared test for both cases
- - Login Activity and MEdic List activity for perform doctors searchs
+ - Login activity and Doctors List activity for perform doctors searchs
 
