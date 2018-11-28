@@ -2,15 +2,19 @@ package com.training.victor.development.test
 
 import android.content.Intent
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.IdlingResource
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
+import com.training.victor.development.ParentInstrumentedTest
 import com.training.victor.development.R
 import com.training.victor.development.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
+import com.training.victor.development.data.Constants
 import com.training.victor.development.ui.MainActivity
+import com.training.victor.development.utils.myTrace
 import cucumber.api.java.After
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
@@ -20,13 +24,25 @@ import cucumber.api.java.en.When
 import org.hamcrest.Matchers.greaterThan
 import org.junit.Assert
 import org.junit.Rule
+import javax.inject.Inject
+import javax.inject.Named
 
-class FirstLaunchTest {
-    @Rule val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+class FirstLaunchTest: ParentInstrumentedTest() {
+    @Inject
+    @Named(Constants.IDLING_NORMAL_REQUEST)
+    lateinit var idlingResource: IdlingResource
+
+    @Rule
+    val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+
     private lateinit var mainActivity: MainActivity
 
+
     @Before
-    fun setUp() {
+    override fun setUp() {
+        super.setUp()
+        testInstrumentedComponent.inject(this)
+
         Intents.init()
         mainActivityTestRule.launchActivity(Intent())
         mainActivity = mainActivityTestRule.activity
@@ -42,6 +58,7 @@ class FirstLaunchTest {
     // --------------------------------------------- TEST CASES ---------------------------------------------
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
+        myTrace("testing idling resource :: $idlingResource")
         Assert.assertNotNull(mainActivity)
 
     }

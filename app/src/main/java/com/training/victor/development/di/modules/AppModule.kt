@@ -1,8 +1,6 @@
 package com.training.victor.development.di.modules
 
-import android.app.Application
 import android.content.Context
-import com.training.victor.development.data.TokenManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Converter
@@ -11,11 +9,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-open class AppModule(private val application: Application) {
+open class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideApplicationContext(): Context = application
+    fun provideApplicationContext(): Context = context
 
     @Provides
     @Singleton
