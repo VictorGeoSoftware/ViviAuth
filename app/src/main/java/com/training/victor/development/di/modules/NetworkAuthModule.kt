@@ -5,6 +5,7 @@ import com.jakewharton.espresso.OkHttp3IdlingResource
 import com.training.victor.development.BuildConfig
 import com.training.victor.development.data.Constants.Companion.IDLING_NORMAL
 import com.training.victor.development.data.Constants.Companion.IDLING_NORMAL_REQUEST
+import com.training.victor.development.di.qualifers.NormalRequest
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -57,8 +58,8 @@ open class NetworkAuthModule {
     }
 
     @Provides
-    @Named(IDLING_NORMAL_REQUEST)
-    fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
+    @NormalRequest
+    open fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(IDLING_NORMAL, okHttpClient)
     }
 }

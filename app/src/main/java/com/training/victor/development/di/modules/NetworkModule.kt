@@ -4,8 +4,8 @@ import android.support.test.espresso.IdlingResource
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import com.training.victor.development.BuildConfig
 import com.training.victor.development.data.Constants.Companion.IDLING_AUTH
-import com.training.victor.development.data.Constants.Companion.IDLING_AUTH_REQUEST
 import com.training.victor.development.data.TokenManager
+import com.training.victor.development.di.qualifers.AuthRequest
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -59,8 +59,8 @@ open class NetworkModule {
     }
 
     @Provides
-    @Named(IDLING_AUTH_REQUEST)
-    fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
+    @AuthRequest
+    open fun provideIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(IDLING_AUTH, okHttpClient)
     }
 }

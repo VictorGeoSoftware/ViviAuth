@@ -9,10 +9,11 @@ import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
+import android.support.test.runner.AndroidJUnit4
 import com.training.victor.development.ParentInstrumentedTest
 import com.training.victor.development.R
 import com.training.victor.development.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
-import com.training.victor.development.data.Constants
+import com.training.victor.development.di.qualifers.NormalRequest
 import com.training.victor.development.ui.MainActivity
 import com.training.victor.development.utils.myTrace
 import cucumber.api.java.After
@@ -24,16 +25,17 @@ import cucumber.api.java.en.When
 import org.hamcrest.Matchers.greaterThan
 import org.junit.Assert
 import org.junit.Rule
+import org.junit.runner.RunWith
 import javax.inject.Inject
-import javax.inject.Named
 
+@RunWith(AndroidJUnit4::class)
 class FirstLaunchTest: ParentInstrumentedTest() {
-    @Inject
-    @Named(Constants.IDLING_NORMAL_REQUEST)
-    lateinit var idlingResource: IdlingResource
-
     @Rule
     val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+
+    @Inject
+    @NormalRequest
+    lateinit var normalIdlingResource: IdlingResource
 
     private lateinit var mainActivity: MainActivity
 
@@ -58,7 +60,7 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     // --------------------------------------------- TEST CASES ---------------------------------------------
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
-        myTrace("testing idling resource :: $idlingResource")
+        myTrace("testing idling resource :: $normalIdlingResource")
         Assert.assertNotNull(mainActivity)
 
     }
