@@ -43,6 +43,7 @@ class FirstLaunchTest {
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
         Assert.assertNotNull(mainActivity)
+
     }
 
     @When("home screen is shown")

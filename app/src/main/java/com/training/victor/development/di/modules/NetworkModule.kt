@@ -1,6 +1,10 @@
 package com.training.victor.development.di.modules
 
+import android.support.test.espresso.IdlingResource
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import com.training.victor.development.BuildConfig
+import com.training.victor.development.data.Constants.Companion.IDLING_AUTH
+import com.training.victor.development.data.Constants.Companion.IDLING_AUTH_REQUEST
 import com.training.victor.development.data.TokenManager
 import dagger.Module
 import dagger.Provides
@@ -52,5 +56,11 @@ open class NetworkModule {
     fun provideRetrofit(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient, converter: Converter.Factory, callAdapterFactory: RxJava2CallAdapterFactory,
                         @Named(NAME_BASE_URL) baseUrl:String): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(callAdapterFactory).addConverterFactory(converter).build()
+    }
+
+    @Provides
+    @Named(IDLING_AUTH_REQUEST)
+    fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
+        return OkHttp3IdlingResource.create(IDLING_AUTH, okHttpClient)
     }
 }
