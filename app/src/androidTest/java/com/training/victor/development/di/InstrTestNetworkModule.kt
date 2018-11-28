@@ -5,7 +5,7 @@ import com.training.victor.development.di.modules.NetworkModule
 import okhttp3.OkHttpClient
 
 class InstrTestNetworkModule: NetworkModule() {
-    override fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
-        return super.provideIdlingResource(okHttpClient)
-    }
+//    override fun provideIdlingResource(okHttpClient: OkHttpClient): IdlingResource {
+//        return super.provideIdlingResource(okHttpClient)
+//    }
 }

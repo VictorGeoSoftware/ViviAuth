@@ -1,11 +1,10 @@
-package com.training.victor.development
+package com.training.victor.development.test
 
 import com.training.victor.development.di.InstrTestNetworkModule
 import com.training.victor.development.di.InstrumentedTestAppModule
 import com.training.victor.development.di.IsntrTestNetworkAuthModule
 import com.training.victor.development.di.components.AppComponent
 import com.training.victor.development.di.modules.*
-import com.training.victor.development.test.FirstLaunchTest
 import dagger.Component
 import javax.inject.Singleton
 
