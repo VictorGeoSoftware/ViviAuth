@@ -7,8 +7,6 @@ import com.training.victor.development.di.modules.NetworkAuthModule.Companion.AU
 import com.training.victor.development.di.modules.NetworkAuthModule.Companion.NORMAL_HTTP_CLIENT
 import com.training.victor.development.di.modules.NetworkModule.Companion.AUTH_HTTP_CLIENT
 import com.training.victor.development.di.modules.NetworkModule.Companion.NORMAL_REQUEST
-import com.training.victor.development.di.qualifers.AuthRequest
-import com.training.victor.development.di.qualifers.NormalRequest
 import com.training.victor.development.network.LoginRepository
 import com.training.victor.development.network.MedicsRepository
 import dagger.Module
@@ -22,7 +20,7 @@ import javax.inject.Singleton
 open class RetrofitModule {
     companion object {
         const val IDLING_NORMAL_REQUEST = "IDLING_NORMAL_REQUEST"
-        const val IDLING_AUTH_REQUEST = "IDLING_NORMAL_REQUEST"
+        const val IDLING_AUTH_REQUEST = "IDLING_AUTH_REQUEST"
     }
 
     @Provides
@@ -34,16 +32,16 @@ open class RetrofitModule {
     open fun provideMedicRepository(@Named(NORMAL_REQUEST) retrofit: Retrofit) = retrofit.create(MedicsRepository::class.java)!!
 
     @Provides
+    @Singleton
     @Named(IDLING_NORMAL_REQUEST)
-//    @NormalRequest
     open fun provideIdlingResource(@Named(NORMAL_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(Constants.IDLING_NORMAL, okHttpClient)
     }
 
     // todo:: así si inyecta
     @Provides
-//    @Named(IDLING_AUTH_REQUEST) // -> si descomento esta linea, no
-//    @AuthRequest
+    @Singleton
+    @Named(IDLING_AUTH_REQUEST) // -> si descomento esta linea, da error
     open fun provideAuthIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(Constants.IDLING_AUTH, okHttpClient)
     }

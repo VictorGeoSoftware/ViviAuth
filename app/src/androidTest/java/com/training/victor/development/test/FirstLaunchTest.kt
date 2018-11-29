@@ -34,15 +34,12 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     @Rule
     val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
-//    @AuthRequest
     @Inject
-    @Named(IDLING_NORMAL_REQUEST)
-//    @NormalRequest
+    @field:Named(IDLING_NORMAL_REQUEST)
     lateinit var normalIdlingResource: IdlingResource
 
     @Inject
-    @Named(IDLING_AUTH_REQUEST)
-//    @AuthRequest
+    @field:Named(IDLING_AUTH_REQUEST)
     lateinit var authIdlingResource: IdlingResource
 
     private lateinit var mainActivity: MainActivity
