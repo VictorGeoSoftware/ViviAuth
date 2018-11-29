@@ -65,8 +65,6 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     // --------------------------------------------- TEST CASES ---------------------------------------------
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
-        myTrace("testing idling normal resource :: ${normalIdlingResource.name}")
-        myTrace("testing idling auth resource :: ${authIdlingResource.name}")
         Assert.assertNotNull(mainActivity)
 
     }

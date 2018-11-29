@@ -38,10 +38,9 @@ open class RetrofitModule {
         return OkHttp3IdlingResource.create(Constants.IDLING_NORMAL, okHttpClient)
     }
 
-    // todo:: así si inyecta
     @Provides
     @Singleton
-    @Named(IDLING_AUTH_REQUEST) // -> si descomento esta linea, da error
+    @Named(IDLING_AUTH_REQUEST)
     open fun provideAuthIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(Constants.IDLING_AUTH, okHttpClient)
     }
