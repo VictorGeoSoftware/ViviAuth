@@ -53,11 +53,4 @@ open class NetworkModule {
                         @Named(NAME_BASE_URL) baseUrl:String): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(callAdapterFactory).addConverterFactory(converter).build()
     }
-
-//    @Provides
-////    @Named("AUTH")
-////    @AuthRequest
-//    open fun provideIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
-//        return OkHttp3IdlingResource.create(IDLING_AUTH, okHttpClient)
-//    }
 }

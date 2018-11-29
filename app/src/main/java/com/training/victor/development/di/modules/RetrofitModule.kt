@@ -20,6 +20,10 @@ import javax.inject.Singleton
 
 @Module
 open class RetrofitModule {
+    companion object {
+        const val IDLING_NORMAL_REQUEST = "IDLING_NORMAL_REQUEST"
+        const val IDLING_AUTH_REQUEST = "IDLING_NORMAL_REQUEST"
+    }
 
     @Provides
     @Singleton
@@ -30,15 +34,15 @@ open class RetrofitModule {
     open fun provideMedicRepository(@Named(NORMAL_REQUEST) retrofit: Retrofit) = retrofit.create(MedicsRepository::class.java)!!
 
     @Provides
-    @Named("NORMAL")
+    @Named(IDLING_NORMAL_REQUEST)
 //    @NormalRequest
     open fun provideIdlingResource(@Named(NORMAL_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(Constants.IDLING_NORMAL, okHttpClient)
     }
 
-    // todo:: así si inyecta, pero con anotaciones no ...
+    // todo:: así si inyecta
     @Provides
-//    @Named("AUTH")
+//    @Named(IDLING_AUTH_REQUEST) // -> si descomento esta linea, no
 //    @AuthRequest
     open fun provideAuthIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
         return OkHttp3IdlingResource.create(Constants.IDLING_AUTH, okHttpClient)

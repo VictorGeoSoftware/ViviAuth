@@ -12,8 +12,8 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.training.victor.development.R
 import com.training.victor.development.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
-import com.training.victor.development.di.qualifers.AuthRequest
-import com.training.victor.development.di.qualifers.NormalRequest
+import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_AUTH_REQUEST
+import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_NORMAL_REQUEST
 import com.training.victor.development.ui.MainActivity
 import com.training.victor.development.utils.myTrace
 import cucumber.api.java.After
@@ -36,12 +36,12 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
 //    @AuthRequest
     @Inject
-    @Named("NORMAL")
+    @Named(IDLING_NORMAL_REQUEST)
 //    @NormalRequest
     lateinit var normalIdlingResource: IdlingResource
 
     @Inject
-    @Named("AUTH")
+    @Named(IDLING_AUTH_REQUEST)
 //    @AuthRequest
     lateinit var authIdlingResource: IdlingResource
 
