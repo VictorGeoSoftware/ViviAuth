@@ -58,7 +58,7 @@ open class NetworkAuthModule {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
-            .client(okHttpClientForIdlingResource)
+//            .client(okHttpClientForIdlingResource)
             .addCallAdapterFactory(callAdapterFactory)
             .addConverterFactory(converter)
             .build()
