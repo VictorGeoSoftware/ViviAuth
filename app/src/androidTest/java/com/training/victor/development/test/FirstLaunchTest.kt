@@ -16,6 +16,8 @@ import android.support.test.runner.AndroidJUnit4
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import com.training.victor.development.R
 import com.training.victor.development.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
+import com.training.victor.development.di.modules.NetworkAuthModule.Companion.NORMAL_HTTP_CLIENT
+import com.training.victor.development.di.modules.NetworkModule.Companion.AUTH_HTTP_CLIENT
 import com.training.victor.development.ui.MainActivity
 import com.training.victor.development.ui.MedicsActivity
 import com.training.victor.development.utils.myTrace
@@ -30,6 +32,7 @@ import org.hamcrest.Matchers.greaterThan
 import org.junit.Rule
 import org.junit.runner.RunWith
 import javax.inject.Inject
+import javax.inject.Named
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchTest: ParentInstrumentedTest() {
@@ -39,10 +42,16 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     val medicsActivityTestRule: ActivityTestRule<MedicsActivity> = ActivityTestRule(MedicsActivity::class.java)
 
     @Inject
-    lateinit var okHttpClientForIdlingResource: OkHttpClient
+    @field:Named(AUTH_HTTP_CLIENT)
+    lateinit var authOkHttpClient: OkHttpClient
+
+    @Inject
+    @field:Named(NORMAL_HTTP_CLIENT)
+    lateinit var normalOkHttpClient: OkHttpClient
 
     private lateinit var mainActivity: MainActivity
-    private lateinit var idlingResource: IdlingResource
+    private lateinit var authIdlingResource: IdlingResource
+    private lateinit var normalIdlingResource: IdlingResource
 
 
     @Before
@@ -54,13 +63,16 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         mainActivityTestRule.launchActivity(Intent())
         mainActivity = mainActivityTestRule.activity
 
-        idlingResource = OkHttp3IdlingResource.create("myIdlingResource", okHttpClientForIdlingResource)
-        IdlingRegistry.getInstance().register(idlingResource)
+        authIdlingResource = OkHttp3IdlingResource.create("authIdlingResource", normalOkHttpClient)
+        normalIdlingResource = OkHttp3IdlingResource.create("normalIdlingResource", authOkHttpClient)
+        IdlingRegistry.getInstance().register(authIdlingResource)
+        IdlingRegistry.getInstance().register(normalIdlingResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(idlingResource)
+        IdlingRegistry.getInstance().unregister(authIdlingResource)
+        IdlingRegistry.getInstance().unregister(normalIdlingResource)
         Intents.release()
         mainActivity.finishAffinity()
     }
@@ -74,7 +86,7 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
     @When("home screen is shown")
     fun home_screen_is_shown() {
-        myTrace("normalIdlingResource => $okHttpClientForIdlingResource")
+        myTrace("normalIdlingResource => $normalOkHttpClient")
         onView(withId(R.id.btnLogin)).perform(click())
         Thread.sleep(1000)
         intended(hasComponent(MedicsActivity::class.java.name))

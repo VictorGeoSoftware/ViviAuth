@@ -13,7 +13,7 @@ open class ParentInstrumentedTest {
 
     @Singleton
     @Component(modules = [AppModule::class, NetworkAuthModule::class, NetworkModule::class,
-        RetrofitModule::class, DataManagerModule::class, TokenManagerModule::class, OkHttpClientModule::class])
+        RetrofitModule::class, DataManagerModule::class, TokenManagerModule::class])
     interface TestInstrumentedComponent: AppComponent {
         fun inject(target: FirstLaunchTest)
     }

@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class, NetworkAuthModule::class, NetworkModule::class, RetrofitModule::class,
-    DataManagerModule::class, TokenManagerModule::class, OkHttpClientModule::class])
+    DataManagerModule::class, TokenManagerModule::class])
 interface AppComponent {
     fun inject(application: Application)
     fun plus(presenterModule: PresenterModule): PresenterComponent
