@@ -27,7 +27,10 @@ class LoginPresenter @Inject constructor(private val androidSchedulers: Schedule
             .subscribe({
                 view?.showProgressBar(false)
                 view?.onLoginSuccessful(it)
+                myTrace("LoginPresenter login ok!")
             },{
+                myTrace(" error beginning!")
+                it.printStackTrace()
                 myTrace("LoginPresenter login error :: ${it.localizedMessage}")
                 view?.showProgressBar(false)
                 view?.onLoginError(it.getErrorMessage())

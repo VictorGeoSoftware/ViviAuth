@@ -24,11 +24,17 @@ fun Any.myTrace(message: String) {
 }
 
 fun Throwable.getErrorMessage(): String {
+    val defaultMessage = this.message ?: this.localizedMessage
+
     return if (this is HttpException) {
         val responseBody = this.response().errorBody()
-        Gson().fromJson<LoginErrorResp>(responseBody?.string(), LoginErrorResp::class.java).errorDescription
+        responseBody?.string()?.let {
+            Gson().fromJson<LoginErrorResp>(it, LoginErrorResp::class.java).errorDescription
+        }.run {
+            defaultMessage
+        }
     } else {
-        message!!
+        defaultMessage
     }
 }
 

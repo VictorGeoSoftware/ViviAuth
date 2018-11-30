@@ -1,20 +1,21 @@
 package com.training.victor.development.test
 
 import android.content.Intent
-import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.IdlingResource
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
+import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.jakewharton.espresso.OkHttp3IdlingResource
 import com.training.victor.development.R
 import com.training.victor.development.assertions.RecyclerViewItemCountAssertion.Companion.withItemCount
-import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_AUTH_REQUEST
-import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_NORMAL_REQUEST
 import com.training.victor.development.ui.MainActivity
 import com.training.victor.development.ui.MedicsActivity
 import com.training.victor.development.utils.myTrace
@@ -24,12 +25,11 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import okhttp3.OkHttpClient
 import org.hamcrest.Matchers.greaterThan
-import org.junit.Assert
 import org.junit.Rule
 import org.junit.runner.RunWith
 import javax.inject.Inject
-import javax.inject.Named
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchTest: ParentInstrumentedTest() {
@@ -39,14 +39,10 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     val medicsActivityTestRule: ActivityTestRule<MedicsActivity> = ActivityTestRule(MedicsActivity::class.java)
 
     @Inject
-    @field:Named(IDLING_NORMAL_REQUEST)
-    lateinit var normalIdlingResource: IdlingResource
-
-    @Inject
-    @field:Named(IDLING_AUTH_REQUEST)
-    lateinit var authIdlingResource: IdlingResource
+    lateinit var okHttpClientForIdlingResource: OkHttpClient
 
     private lateinit var mainActivity: MainActivity
+    private lateinit var idlingResource: IdlingResource
 
 
     @Before
@@ -57,14 +53,14 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         Intents.init()
         mainActivityTestRule.launchActivity(Intent())
         mainActivity = mainActivityTestRule.activity
-        IdlingRegistry.getInstance().register(normalIdlingResource)
-        IdlingRegistry.getInstance().register(authIdlingResource)
+
+        idlingResource = OkHttp3IdlingResource.create("myIdlingResource", okHttpClientForIdlingResource)
+        IdlingRegistry.getInstance().register(idlingResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(normalIdlingResource)
-        IdlingRegistry.getInstance().unregister(authIdlingResource)
+        IdlingRegistry.getInstance().unregister(idlingResource)
         Intents.release()
         mainActivity.finishAffinity()
     }
@@ -78,20 +74,21 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
     @When("home screen is shown")
     fun home_screen_is_shown() {
+        myTrace("normalIdlingResource => $okHttpClientForIdlingResource")
         onView(withId(R.id.btnLogin)).perform(click())
+        Thread.sleep(1000)
+        intended(hasComponent(MedicsActivity::class.java.name))
     }
 
     @And("medics list is requested")
     fun medics_list_is_requested() {
-        Thread.sleep(1000) // todo:: waiting for MedicsActivity loading, replace with IdlingResource
-
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
         onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
     }
 
     @Then("list is fulfilled")
     fun list_is_fulfilled() {
-        Thread.sleep(2000)
+//        Thread.sleep(5000)
         onView(withId(R.id.lstDoctors)).check(withItemCount(greaterThan(0)))
     }
 }

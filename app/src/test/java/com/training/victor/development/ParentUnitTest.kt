@@ -14,7 +14,7 @@ open class ParentUnitTest {
 
     @Singleton
     @Component(modules = [AppModule::class, NetworkAuthModule::class, NetworkModule::class,
-        RetrofitModule::class, DataManagerModule::class, TokenManagerModule::class])
+        RetrofitModule::class, DataManagerModule::class, TokenManagerModule::class, OkHttpClientModule::class])
     interface TestComponent : AppComponent {
         fun inject(target: LoginPresenterTest)
         fun inject(target: MedicsPresenterTest)

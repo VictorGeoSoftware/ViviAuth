@@ -35,7 +35,7 @@ open class NetworkModule {
 
         val okHttpClient = OkHttpClient.Builder().readTimeout(10, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS)
         okHttpClient.addInterceptor(interceptor)
-//        okHttpClient.hostnameVerifier { hostname , session -> true } // for Swagger endpoints
+        okHttpClient.hostnameVerifier { hostname , session -> true } // for Swagger endpoints
         okHttpClient.addInterceptor {
             val tokenValue = tokenManager.currentLoginResponse?.tokenType + " " + tokenManager.currentLoginResponse?.accessToken!!
             val request = it.request().newBuilder()
@@ -51,8 +51,17 @@ open class NetworkModule {
 
     @Provides
     @Named(NORMAL_REQUEST)
-    fun provideRetrofit(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient, converter: Converter.Factory, callAdapterFactory: RxJava2CallAdapterFactory,
+    fun provideRetrofit(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient,
+                        okHttpClientForIdlingResource: OkHttpClient,
+                        converter: Converter.Factory,
+                        callAdapterFactory: RxJava2CallAdapterFactory,
                         @Named(NAME_BASE_URL) baseUrl:String): Retrofit {
-        return Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(callAdapterFactory).addConverterFactory(converter).build()
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .client(okHttpClientForIdlingResource)
+            .addCallAdapterFactory(callAdapterFactory)
+            .addConverterFactory(converter)
+            .build()
     }
 }

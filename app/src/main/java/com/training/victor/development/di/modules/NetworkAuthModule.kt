@@ -34,6 +34,7 @@ open class NetworkAuthModule {
 
         val okHttpClient = OkHttpClient.Builder().readTimeout(10, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS)
         okHttpClient.addInterceptor(interceptor)
+        okHttpClient.hostnameVerifier { hostname , session -> true } // for Swagger endpoints
         okHttpClient.addInterceptor {
             val request = it.request().newBuilder()
                 .addHeader("Accept", "application/json")
@@ -49,8 +50,17 @@ open class NetworkAuthModule {
 
     @Provides
     @Named(AUTH_REQUEST)
-    fun provideRetrofit(@Named(NORMAL_HTTP_CLIENT) okHttpClient: OkHttpClient, converter: Converter.Factory, callAdapterFactory: RxJava2CallAdapterFactory,
+    fun provideRetrofit(@Named(NORMAL_HTTP_CLIENT) okHttpClient: OkHttpClient,
+                        okHttpClientForIdlingResource: OkHttpClient,
+                        converter: Converter.Factory,
+                        callAdapterFactory: RxJava2CallAdapterFactory,
                         @Named(NAME_BASE_AUTH_URL) baseUrl:String): Retrofit {
-        return Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient).addCallAdapterFactory(callAdapterFactory).addConverterFactory(converter).build()
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .client(okHttpClientForIdlingResource)
+            .addCallAdapterFactory(callAdapterFactory)
+            .addConverterFactory(converter)
+            .build()
     }
 }
