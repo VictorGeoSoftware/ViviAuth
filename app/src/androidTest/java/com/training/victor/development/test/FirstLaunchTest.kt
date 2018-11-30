@@ -20,7 +20,6 @@ import com.training.victor.development.di.modules.NetworkAuthModule.Companion.NO
 import com.training.victor.development.di.modules.NetworkModule.Companion.AUTH_HTTP_CLIENT
 import com.training.victor.development.ui.MainActivity
 import com.training.victor.development.ui.MedicsActivity
-import com.training.victor.development.utils.myTrace
 import cucumber.api.java.After
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
@@ -65,14 +64,10 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
         authIdlingResource = OkHttp3IdlingResource.create("authIdlingResource", normalOkHttpClient)
         normalIdlingResource = OkHttp3IdlingResource.create("normalIdlingResource", authOkHttpClient)
-        IdlingRegistry.getInstance().register(authIdlingResource)
-        IdlingRegistry.getInstance().register(normalIdlingResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(authIdlingResource)
-        IdlingRegistry.getInstance().unregister(normalIdlingResource)
         Intents.release()
         mainActivity.finishAffinity()
     }
@@ -86,21 +81,23 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
     @When("home screen is shown")
     fun home_screen_is_shown() {
-        myTrace("normalIdlingResource => $normalOkHttpClient")
+        IdlingRegistry.getInstance().register(authIdlingResource)
         onView(withId(R.id.btnLogin)).perform(click())
-        Thread.sleep(1000)
+        Thread.sleep(1000) // loading second activity time
         intended(hasComponent(MedicsActivity::class.java.name))
+        IdlingRegistry.getInstance().unregister(authIdlingResource)
     }
 
     @And("medics list is requested")
     fun medics_list_is_requested() {
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
-        onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
     }
 
     @Then("list is fulfilled")
     fun list_is_fulfilled() {
-//        Thread.sleep(5000)
+        IdlingRegistry.getInstance().register(normalIdlingResource)
+        onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
+        IdlingRegistry.getInstance().unregister(normalIdlingResource)
         onView(withId(R.id.lstDoctors)).check(withItemCount(greaterThan(0)))
     }
 }
