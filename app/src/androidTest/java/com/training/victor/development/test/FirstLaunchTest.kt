@@ -1,13 +1,14 @@
 package com.training.victor.development.test
 
 import android.content.Intent
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.IdlingResource
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.training.victor.development.R
@@ -15,6 +16,7 @@ import com.training.victor.development.assertions.RecyclerViewItemCountAssertion
 import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_AUTH_REQUEST
 import com.training.victor.development.di.modules.RetrofitModule.Companion.IDLING_NORMAL_REQUEST
 import com.training.victor.development.ui.MainActivity
+import com.training.victor.development.ui.MedicsActivity
 import com.training.victor.development.utils.myTrace
 import cucumber.api.java.After
 import cucumber.api.java.Before
@@ -33,6 +35,8 @@ import javax.inject.Named
 class FirstLaunchTest: ParentInstrumentedTest() {
     @Rule
     val mainActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
+    @Rule
+    val medicsActivityTestRule: ActivityTestRule<MedicsActivity> = ActivityTestRule(MedicsActivity::class.java)
 
     @Inject
     @field:Named(IDLING_NORMAL_REQUEST)
@@ -53,10 +57,14 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         Intents.init()
         mainActivityTestRule.launchActivity(Intent())
         mainActivity = mainActivityTestRule.activity
+        IdlingRegistry.getInstance().register(normalIdlingResource)
+        IdlingRegistry.getInstance().register(authIdlingResource)
     }
 
     @After
     fun tearDown() {
+        IdlingRegistry.getInstance().unregister(normalIdlingResource)
+        IdlingRegistry.getInstance().unregister(authIdlingResource)
         Intents.release()
         mainActivity.finishAffinity()
     }
@@ -65,8 +73,7 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     // --------------------------------------------- TEST CASES ---------------------------------------------
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
-        Assert.assertNotNull(mainActivity)
-
+        onView(withId(R.id.btnLogin)).check(matches(isDisplayed()))
     }
 
     @When("home screen is shown")
@@ -76,14 +83,15 @@ class FirstLaunchTest: ParentInstrumentedTest() {
 
     @And("medics list is requested")
     fun medics_list_is_requested() {
-        Thread.sleep(2000)
+        Thread.sleep(1000) // todo:: waiting for MedicsActivity loading, replace with IdlingResource
+
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
         onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
     }
 
     @Then("list is fulfilled")
     fun list_is_fulfilled() {
-        Thread.sleep(5000)
+        Thread.sleep(2000)
         onView(withId(R.id.lstDoctors)).check(withItemCount(greaterThan(0)))
     }
 }

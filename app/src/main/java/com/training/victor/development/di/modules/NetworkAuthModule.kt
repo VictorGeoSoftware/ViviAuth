@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 open class NetworkAuthModule {
@@ -25,6 +26,7 @@ open class NetworkAuthModule {
     fun provideBaseUrlString():String = BuildConfig.API_AUTH_URL
 
     @Provides
+    @Singleton
     @Named(NORMAL_HTTP_CLIENT)
     fun provideOkHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()

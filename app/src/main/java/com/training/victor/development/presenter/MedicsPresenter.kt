@@ -56,6 +56,8 @@ class MedicsPresenter @Inject constructor(private val androidSchedulers: Schedul
                 view?.onMedicListReceived(it)
             },{
                 view?.showProgressBar(false)
+                myTrace("getMedicList :: $it")
+                it.printStackTrace()
 
                 if (it.getErrorMessage().contains("Access token expired:")) {
                     view?.onAccessTokenExpired()

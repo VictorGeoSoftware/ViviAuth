@@ -28,7 +28,7 @@ fun Throwable.getErrorMessage(): String {
         val responseBody = this.response().errorBody()
         Gson().fromJson<LoginErrorResp>(responseBody?.string(), LoginErrorResp::class.java).errorDescription
     } else {
-        this.localizedMessage
+        message!!
     }
 }
 
