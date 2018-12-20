@@ -25,7 +25,6 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -73,11 +72,13 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         intended(hasComponent(MedicsActivity::class.java.name))
     }
 
+    // todo :: include positioning permission dialog testing case!!
     @And("medics list is requested")
     fun medics_list_is_requested() {
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
     }
 
+    // todo :: include error message toast testing case!!
     @Then("list is fulfilled")
     fun list_is_fulfilled() {
         onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
