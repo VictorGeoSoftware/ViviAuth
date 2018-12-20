@@ -78,11 +78,13 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
     }
 
-    // todo :: include error message toast testing case!!
     @Then("list is fulfilled")
     fun list_is_fulfilled() {
         onView(withId(R.id.edtSearchValue)).perform(clearText(), typeText("medico"))
         Thread.sleep(2000) // rx debounce time
         onView(withId(R.id.lstDoctors)).check(withItemCount(greaterThanOrEqualTo(0)))
+
+        // todo :: include error message toast testing case!!
+        // onView(withText(R.string.TOAST_STRING)).inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 }
