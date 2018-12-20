@@ -29,7 +29,13 @@ fun Throwable.getErrorMessage(): String {
     return if (this is HttpException) {
         val responseBody = this.response().errorBody()
         responseBody?.string()?.let {
-            Gson().fromJson<LoginErrorResp>(it, LoginErrorResp::class.java).errorDescription
+            if (it.isEmpty()) {
+                "Unknown error"
+            } else {
+                val gson = Gson()
+                val error = gson.fromJson(it, LoginErrorResp::class.java)
+                error.errorDescription
+            }
         }.run {
             defaultMessage
         }

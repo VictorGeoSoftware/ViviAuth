@@ -1,6 +1,7 @@
 package com.training.victor.development.di.modules
 
 import com.training.victor.development.BuildConfig
+import com.training.victor.development.NormalIdlingResources
 import com.training.victor.development.data.TokenManager
 import dagger.Module
 import dagger.Provides
@@ -55,6 +56,9 @@ open class NetworkModule {
                         converter: Converter.Factory,
                         callAdapterFactory: RxJava2CallAdapterFactory,
                         @Named(NAME_BASE_URL) baseUrl:String): Retrofit {
+
+        NormalIdlingResources.registerOkHttp(okHttpClient)
+
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

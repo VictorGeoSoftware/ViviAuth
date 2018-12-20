@@ -1,6 +1,8 @@
 package com.training.victor.development.di.modules
 
 import com.training.victor.development.BuildConfig
+import com.training.victor.development.NormalIdlingResources
+import com.training.victor.development.OauthIdlingResources
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -54,6 +56,9 @@ open class NetworkAuthModule {
                         converter: Converter.Factory,
                         callAdapterFactory: RxJava2CallAdapterFactory,
                         @Named(NAME_BASE_AUTH_URL) baseUrl:String): Retrofit {
+
+        OauthIdlingResources.registerOkHttp(okHttpClient)
+
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

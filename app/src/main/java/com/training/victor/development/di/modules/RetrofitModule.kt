@@ -12,10 +12,6 @@ import javax.inject.Singleton
 
 @Module
 open class RetrofitModule {
-    companion object {
-        const val IDLING_NORMAL_REQUEST = "IDLING_NORMAL_REQUEST"
-        const val IDLING_AUTH_REQUEST = "IDLING_AUTH_REQUEST"
-    }
 
     @Provides
     @Singleton
@@ -24,18 +20,4 @@ open class RetrofitModule {
     @Provides
     @Singleton
     open fun provideMedicRepository(@Named(NORMAL_REQUEST) retrofit: Retrofit) = retrofit.create(MedicsRepository::class.java)!!
-
-//    @Provides
-//    @Singleton
-//    @Named(IDLING_NORMAL_REQUEST)
-//    open fun provideIdlingResource(@Named(NORMAL_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
-//        return OkHttp3IdlingResource.create(Constants.IDLING_NORMAL, okHttpClient)
-//    }
-
-//    @Provides
-//    @Singleton
-//    @Named(IDLING_AUTH_REQUEST)
-//    open fun provideAuthIdlingResource(@Named(AUTH_HTTP_CLIENT) okHttpClient: OkHttpClient): IdlingResource {
-//        return OkHttp3IdlingResource.create(Constants.IDLING_AUTH, okHttpClient)
-//    }
 }
