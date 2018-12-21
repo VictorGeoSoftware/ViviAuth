@@ -1,5 +1,6 @@
 package com.training.victor.development.test
 
+import android.Manifest
 import android.content.Intent
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.IdlingRegistry
@@ -11,7 +12,9 @@ import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
+import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import android.support.test.runner.permission.PermissionRequester
 import com.training.victor.development.NormalIdlingResources
 import com.training.victor.development.OauthIdlingResources
 import com.training.victor.development.R
@@ -48,9 +51,12 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         mainActivityTestRule.launchActivity(Intent())
         mainActivity = mainActivityTestRule.activity
 
+
         myTrace("idling resources :: ${NormalIdlingResources.getmIdlingResource()} ${OauthIdlingResources.getmIdlingResource()}")
         IdlingRegistry.getInstance().register(NormalIdlingResources.getmIdlingResource())
         IdlingRegistry.getInstance().register(OauthIdlingResources.getmIdlingResource())
+
+        grantPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
     @After
@@ -60,7 +66,7 @@ class FirstLaunchTest: ParentInstrumentedTest() {
     }
 
 
-    // --------------------------------------------- TEST CASES ---------------------------------------------
+    // -------------------------------------------------- TEST CASES ---------------------------------------------------
     @Given("^a user launch the app for first time")
     fun a_user_launch_the_app_for_first_time() {
         onView(withId(R.id.btnLogin)).check(matches(isDisplayed()))
@@ -87,4 +93,27 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         // todo :: include error message toast testing case!!
         // onView(withText(R.string.TOAST_STRING)).inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
+
+
+
+    // ------------------------------------------------------------ METHODS --------------------------------------------
+    private fun grantPermissions(vararg permissions: String) {
+        PermissionRequester().apply {
+            addPermissions(*permissions)
+            requestPermissions()
+        }
+    }
+//    private fun allowLocationPermissions() {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            val btnAllow = mDevice.findObject(UiSelector().text("Allow"))
+//
+//            if (btnAllow.exists()) {
+//                try {
+//                    btnAllow.click()
+//                } catch (e: Exception) {
+//                    myTrace(e.localizedMessage)
+//                }
+//            }
+//        }
+//    }
 }
