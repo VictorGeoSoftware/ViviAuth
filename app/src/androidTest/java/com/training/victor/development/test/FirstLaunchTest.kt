@@ -1,6 +1,7 @@
 package com.training.victor.development.test
 
 import android.Manifest
+import android.app.PendingIntent.getActivity
 import android.content.Intent
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.IdlingRegistry
@@ -9,8 +10,8 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.RootMatchers.withDecorView
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
@@ -29,6 +30,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import org.hamcrest.Matchers.greaterThanOrEqualTo
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.runner.RunWith
 
@@ -78,7 +80,6 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         intended(hasComponent(MedicsActivity::class.java.name))
     }
 
-    // todo :: include positioning permission dialog testing case!!
     @And("medics list is requested")
     fun medics_list_is_requested() {
         onView(withId(R.id.edtSearchValue)).check(matches(isDisplayed()))
@@ -91,7 +92,7 @@ class FirstLaunchTest: ParentInstrumentedTest() {
         onView(withId(R.id.lstDoctors)).check(withItemCount(greaterThanOrEqualTo(0)))
 
         // todo :: include error message toast testing case!!
-        // onView(withText(R.string.TOAST_STRING)).inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+         onView(withText(R.string.TOAST_STRING)).inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
 
@@ -103,17 +104,4 @@ class FirstLaunchTest: ParentInstrumentedTest() {
             requestPermissions()
         }
     }
-//    private fun allowLocationPermissions() {
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            val btnAllow = mDevice.findObject(UiSelector().text("Allow"))
-//
-//            if (btnAllow.exists()) {
-//                try {
-//                    btnAllow.click()
-//                } catch (e: Exception) {
-//                    myTrace(e.localizedMessage)
-//                }
-//            }
-//        }
-//    }
 }
